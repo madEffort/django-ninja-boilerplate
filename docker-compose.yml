@@ -33,7 +33,22 @@ services:
     volumes:
       - ./prometheus/:/etc/prometheus/
 
+  grafana:
+    image: grafana/grafana
+    container_name: my_grafana_container
+    environment:
+      GF_INSTALL_PLUGINS: "grafana-clock-panel,grafana-simple-json-datasource"
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
+    volumes:
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+
 volumes:
   postgres_data:
+  grafana_data:
 # 실행
 # docker-compose --env-file .env up -d
